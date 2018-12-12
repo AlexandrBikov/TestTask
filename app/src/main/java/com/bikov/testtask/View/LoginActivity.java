@@ -14,7 +14,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.bikov.testtask.R;
 import com.bikov.testtask.Service.LoginManager;
 
