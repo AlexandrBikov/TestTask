@@ -1,29 +1,32 @@
 package com.bikov.testtask.View;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.bikov.testtask.R;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AccountFragment extends Fragment/* implements View.OnClickListener*/ {
+public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private AppBarLayout appBarLayout;
-  //  private CircleImageView image;
+    private CircleImageView image;
     private Toolbar toolbar;
-    private TextInputLayout name;
+    private LinearLayout name;
+    private EditText nameField;
     private FloatingActionButton editButton;
     private int imageX;
     private int totalScrollRange;
@@ -41,17 +44,19 @@ public class AccountFragment extends Fragment/* implements View.OnClickListener*
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, null);
-/*
         name = view.findViewById(R.id.name);
         toolbar = view.findViewById(R.id.toolbar);
         image = view.findViewById(R.id.profile_image);
         appBarLayout = view.findViewById(R.id.appbar);
         editButton = view.findViewById(R.id.edit_button);
+        nameField = view.findViewById(R.id.name_field);
 
         imageMarginParams = (ViewGroup.MarginLayoutParams) image.getLayoutParams();
 
-//        editButton.setOnClickListener(this);
-//        image.setOnClickListener(this);
+        editButton.setOnClickListener(this);
+        image.setOnClickListener(this);
+
+        nameField.setInputType(InputType.TYPE_NULL);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -74,10 +79,9 @@ public class AccountFragment extends Fragment/* implements View.OnClickListener*
                     image.setScaleY(imageScale);
                 }
             }
-        });*/
+        });
         return view;
     }
-/*
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -95,12 +99,15 @@ public class AccountFragment extends Fragment/* implements View.OnClickListener*
         if (editModeOn) {
             editModeOn = false;
             editButton.setImageResource(R.drawable.edit_button_icon);
+            nameField.setInputType(InputType.TYPE_NULL);
+            hideKeyboard(getContext(), nameField);
             if (!imageAdded) {
                 image.setImageResource(R.drawable.no_photo_icon);
             }
         } else {
             editModeOn = true;
             editButton.setImageResource(R.drawable.done_button_icon);
+            nameField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
             if (!imageAdded) {
                 image.setImageResource(R.drawable.add_photo_icon);
             }
@@ -127,5 +134,11 @@ public class AccountFragment extends Fragment/* implements View.OnClickListener*
             image.setImageURI(uri);
         }
 
-    }*/
+    }
+
+    public static void hideKeyboard(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        view.clearFocus();
+    }
 }

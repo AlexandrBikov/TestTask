@@ -31,20 +31,20 @@
                     android:id="@+id/login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@null"
                     android:hint="@string/prompt_login"
                     android:maxLines="1"
-                    android:shadowColor="@color/colorAccent"
-                    android:outlineAmbientShadowColor="@color/colorAccent"
                     android:singleLine="true"
-                    android:textColorHighlight="@color/colorAccent"
-                    android:outlineSpotShadowColor="@color/colorAccent"
-                    android:textColorLink="@color/colorAccent"/>
-
+                    android:textSize="20sp" />
             </android.support.design.widget.TextInputLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent" />
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
 
                 <EditText
                     android:id="@+id/password"
@@ -56,9 +56,14 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:background="@null"
+                    android:textSize="20sp" />
             </android.support.design.widget.TextInputLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorAccent" />
             <Button
                 android:id="@+id/sign_in_button"
                 style="?android:textAppearanceSmall"

@@ -3,28 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="tooltipForegroundColor">#ffb0aa</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">#d166ff</item>
-        <item name="colorControlActivated">#dc8f41</item>
-        <item name="colorControlNormal">#d11472</item>
-        <item name="colorControlHighlight">#dfdfdf</item>
-        <item name="editTextColor">#ff0000</item>
-        <item name="colorBackgroundFloating">#ff00fb</item>
-        <item name="colorButtonNormal">#e1ff00</item>
-        <item name="colorError">#00ffdd</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="test" parent="Widget.AppCompat.EditText">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">#d166ff</item>
-        <item name="colorControlActivated">#dc8f41</item>
-        <item name="colorControlNormal">#d11472</item>
-        <item name="colorControlHighlight">#dfdfdf</item>
-        <item name="editTextColor">#ff0000</item>
-        <item name="colorBackgroundFloating">#ff00fb</item>
-        <item name="colorButtonNormal">#e1ff00</item>
-        <item name="colorError">#00ffdd</item>
+    <style name="nameEditText" parent="AppTheme">
+        <item name="colorAccent">@color/white</item>
     </style>
 </resources>

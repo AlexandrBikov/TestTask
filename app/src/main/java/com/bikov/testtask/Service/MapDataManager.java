@@ -1,8 +1,6 @@
 package com.bikov.testtask.Service;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.support.v4.content.res.ResourcesCompat;
 
 import com.bikov.testtask.R;
 import com.google.android.gms.maps.model.LatLng;
