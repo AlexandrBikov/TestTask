@@ -27,7 +27,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private Toolbar toolbar;
     private LinearLayout name;
     private EditText nameField;
+    private EditText loginField;
+    private EditText passwordField;
+    private EditText emailField;
+    private EditText phoneField;
     private FloatingActionButton editButton;
+    private View rootView;
     private int imageX;
     private int totalScrollRange;
     private int imageMargin;
@@ -43,20 +48,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_account, null);
-        name = view.findViewById(R.id.name);
-        toolbar = view.findViewById(R.id.toolbar);
-        image = view.findViewById(R.id.profile_image);
-        appBarLayout = view.findViewById(R.id.appbar);
-        editButton = view.findViewById(R.id.edit_button);
-        nameField = view.findViewById(R.id.name_field);
+        rootView = inflater.inflate(R.layout.fragment_account, null);
+
+        assignViews();
 
         imageMarginParams = (ViewGroup.MarginLayoutParams) image.getLayoutParams();
 
         editButton.setOnClickListener(this);
         image.setOnClickListener(this);
 
-        nameField.setInputType(InputType.TYPE_NULL);
+        makeFieldsNonEditable();
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -80,7 +81,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-        return view;
+        return rootView;
     }
     @Override
     public void onClick(View v) {
@@ -95,23 +96,60 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void assignViews(){
+        name = rootView.findViewById(R.id.name);
+        toolbar = rootView.findViewById(R.id.toolbar);
+        image = rootView.findViewById(R.id.profile_image);
+        appBarLayout = rootView.findViewById(R.id.appbar);
+        editButton = rootView.findViewById(R.id.edit_button);
+        nameField = rootView.findViewById(R.id.name_field);
+        phoneField = rootView.findViewById(R.id.phone_field);
+        emailField = rootView.findViewById(R.id.email_field);
+        loginField = rootView.findViewById(R.id.login_field);
+        passwordField = rootView.findViewById(R.id.password_field);
+    }
+
     private void editButtonClicked() {
         if (editModeOn) {
             editModeOn = false;
-            editButton.setImageResource(R.drawable.edit_button_icon);
-            nameField.setInputType(InputType.TYPE_NULL);
+            setIconsToNonEditMode();
+            makeFieldsNonEditable();
             hideKeyboard(getContext(), nameField);
-            if (!imageAdded) {
-                image.setImageResource(R.drawable.no_photo_icon);
-            }
         } else {
             editModeOn = true;
-            editButton.setImageResource(R.drawable.done_button_icon);
-            nameField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-            if (!imageAdded) {
-                image.setImageResource(R.drawable.add_photo_icon);
-            }
+            setIconsToEditMode();
+            makeFieldsEditable();
         }
+    }
+
+    private void setIconsToEditMode(){
+        editButton.setImageResource(R.drawable.done_button_icon);
+        if (!imageAdded) {
+            image.setImageResource(R.drawable.add_photo_icon);
+        }
+    }
+
+    private void setIconsToNonEditMode(){
+        editButton.setImageResource(R.drawable.edit_button_icon);
+        if (!imageAdded) {
+            image.setImageResource(R.drawable.no_photo_icon);
+        }
+    }
+
+    private void makeFieldsEditable(){
+        nameField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        emailField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        loginField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        passwordField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        phoneField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+    }
+
+    private void makeFieldsNonEditable(){
+        nameField.setInputType(InputType.TYPE_NULL);
+        emailField.setInputType(InputType.TYPE_NULL);
+        loginField.setInputType(InputType.TYPE_NULL);
+        passwordField.setInputType(InputType.TYPE_NULL);
+        phoneField.setInputType(InputType.TYPE_NULL);
     }
 
     private void changeProfileImage() {

@@ -10,4 +10,7 @@
     <style name="nameEditText" parent="AppTheme">
         <item name="colorAccent">@color/white</item>
     </style>
+    <style name="editButton" parent="AppTheme">
+        <item name="colorAccent">@color/white</item>
+    </style>
 </resources>

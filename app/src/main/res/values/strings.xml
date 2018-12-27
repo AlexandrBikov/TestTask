@@ -11,7 +11,4 @@
     <string name="error_field_required">This field is required</string>
     <string name="title_map">Map</string>
     <string name="title_account">Account</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_maps_fragment">Map</string>
-    <string name="title_activity_map_fragment">Map</string>
 </resources>
