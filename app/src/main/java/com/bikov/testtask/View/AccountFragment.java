@@ -15,9 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.bikov.testtask.R;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
@@ -25,19 +27,22 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private AppBarLayout appBarLayout;
     private CircleImageView image;
     private Toolbar toolbar;
-    private LinearLayout name;
     private EditText nameField;
     private EditText loginField;
     private EditText bioField;
     private EditText phoneField;
+    private ImageButton backButton;
     private FloatingActionButton editButton;
     private View rootView;
-    private int imageX;
+    private float imageX;
+    private float imageY;
+    private float imageStartY;
     private int totalScrollRange;
     private int imageMargin;
     private int toolbarHeight;
     private int imageStartSize;
     private int imageSize;
+    private int backButtonSize;
     private float imageScale;
     private ViewGroup.MarginLayoutParams imageMarginParams;
     private boolean editModeOn = false;
@@ -49,7 +54,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_account, null);
 
-        assignViews();
+        assignViewVariables();
 
         imageMarginParams = (ViewGroup.MarginLayoutParams) image.getLayoutParams();
 
@@ -57,7 +62,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         image.setOnClickListener(this);
 
         makeFieldsNonEditable();
+        setImageAnimation();
 
+        return rootView;
+    }
+
+    private void setImageAnimation() {
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
@@ -67,21 +77,28 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
                 toolbarHeight = toolbar.getHeight();
                 imageStartSize = image.getHeight();
+                backButtonSize = backButton.getWidth();
+                if (imageStartY == 0) {
+                    imageStartY = image.getY();
+                }
+
+                System.out.println(image.getY());
 
                 imageScale = offset / totalScrollRange + 1;
                 imageSize = (int) (imageStartSize * imageScale);
-                imageX = imageMargin - imageSize + (int) (imageSize * imageScale);
+                imageX = imageMargin * 2 + (backButtonSize - imageSize + imageMargin) * imageScale;
+                imageY = imageStartY + imageStartSize - imageSize;
 
                 if (imageSize > toolbarHeight * 0.75) {
-                    name.setPadding(imageSize, 0, 0, 0);
+                    image.setY(imageY);
                     image.setX(imageX);
                     image.setScaleX(imageScale);
                     image.setScaleY(imageScale);
                 }
             }
         });
-        return rootView;
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -95,8 +112,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void assignViews(){
-        name = rootView.findViewById(R.id.name);
+    private void assignViewVariables() {
         toolbar = rootView.findViewById(R.id.toolbar);
         image = rootView.findViewById(R.id.profile_image);
         appBarLayout = rootView.findViewById(R.id.appbar);
@@ -105,6 +121,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         phoneField = rootView.findViewById(R.id.phone_field);
         bioField = rootView.findViewById(R.id.bio_field);
         loginField = rootView.findViewById(R.id.login_field);
+        backButton = rootView.findViewById(R.id.back_button);
     }
 
     private void editButtonClicked() {
@@ -120,28 +137,28 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void setIconsToEditMode(){
+    private void setIconsToEditMode() {
         editButton.setImageResource(R.drawable.done_button_icon);
         if (!imageAdded) {
             image.setImageResource(R.drawable.add_photo_icon);
         }
     }
 
-    private void setIconsToNonEditMode(){
+    private void setIconsToNonEditMode() {
         editButton.setImageResource(R.drawable.edit_button_icon);
         if (!imageAdded) {
             image.setImageResource(R.drawable.no_photo_icon);
         }
     }
 
-    private void makeFieldsEditable(){
+    private void makeFieldsEditable() {
         nameField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         bioField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         loginField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         phoneField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
     }
 
-    private void makeFieldsNonEditable(){
+    private void makeFieldsNonEditable() {
         nameField.setInputType(InputType.TYPE_NULL);
         bioField.setInputType(InputType.TYPE_NULL);
         loginField.setInputType(InputType.TYPE_NULL);
