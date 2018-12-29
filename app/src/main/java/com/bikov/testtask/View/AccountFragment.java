@@ -28,8 +28,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private LinearLayout name;
     private EditText nameField;
     private EditText loginField;
-    private EditText passwordField;
-    private EditText emailField;
+    private EditText bioField;
     private EditText phoneField;
     private FloatingActionButton editButton;
     private View rootView;
@@ -104,9 +103,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         editButton = rootView.findViewById(R.id.edit_button);
         nameField = rootView.findViewById(R.id.name_field);
         phoneField = rootView.findViewById(R.id.phone_field);
-        emailField = rootView.findViewById(R.id.email_field);
+        bioField = rootView.findViewById(R.id.bio_field);
         loginField = rootView.findViewById(R.id.login_field);
-        passwordField = rootView.findViewById(R.id.password_field);
     }
 
     private void editButtonClicked() {
@@ -138,17 +136,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private void makeFieldsEditable(){
         nameField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        emailField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        bioField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         loginField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        passwordField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         phoneField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
     }
 
     private void makeFieldsNonEditable(){
         nameField.setInputType(InputType.TYPE_NULL);
-        emailField.setInputType(InputType.TYPE_NULL);
+        bioField.setInputType(InputType.TYPE_NULL);
         loginField.setInputType(InputType.TYPE_NULL);
-        passwordField.setInputType(InputType.TYPE_NULL);
         phoneField.setInputType(InputType.TYPE_NULL);
     }
 
