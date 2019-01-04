@@ -8,23 +8,23 @@ import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-public class ViewToDrawableConverter implements Runnable{
+public class ViewToBitmapConverter implements Runnable{
 
     private Context context;
     private View rootView;
-    private Bitmap drawable;
+    private Bitmap bitmap;
 
-    public ViewToDrawableConverter(Context context, View rootView) {
+    public ViewToBitmapConverter(Context context, View rootView) {
         this.context = context;
         this.rootView = rootView;
     }
 
     @Override
     public void run() {
-        drawable = createDrawableFromView(context, rootView);
+        bitmap = createBitmapFromView(context, rootView);
     }
 
-    private Bitmap createDrawableFromView(Context context, View view) {
+    private Bitmap createBitmapFromView(Context context, View view) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         view.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
@@ -39,7 +39,7 @@ public class ViewToDrawableConverter implements Runnable{
         return bitmap;
     }
 
-    public Bitmap getDrawable(){
-        return drawable;
+    public Bitmap getBitmap(){
+        return bitmap;
     }
 }

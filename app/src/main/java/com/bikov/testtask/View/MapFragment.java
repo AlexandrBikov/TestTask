@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.bikov.testtask.Service.MapDataManager;
 import com.bikov.testtask.Service.MapMarker;
+import com.bikov.testtask.Service.MarkerList;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -17,6 +18,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.bikov.testtask.R;
+
+import java.util.ArrayList;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -38,12 +41,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMap = googleMap;
         MapDataManager dm = MapDataManager.getInstance(this.getContext());
+        ArrayList<MapMarker> markerList = dm.getMarkerList().getList();
 
-        for(MapMarker marker: dm.getMarkerList().getList()) {
+        for(MapMarker marker: markerList) {
             marker.convertToBitmap(getContext());
         }
 
-        for(MapMarker marker: dm.getMarkerList().getList()){
+        for(MapMarker marker: markerList){
             mMap.addMarker(new MarkerOptions().position(marker.getCoordinates()).icon(BitmapDescriptorFactory.fromBitmap(marker.getMarkerBitmap())));
         }
 

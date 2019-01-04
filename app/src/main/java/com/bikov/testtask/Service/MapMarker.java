@@ -16,11 +16,10 @@ public class MapMarker{
     private String subtitle;
     private Drawable icon;
     private LatLng coordinates;
-    private Bitmap markerBitmap;
     private TextView markerTitleView;
     private TextView markerSubtitleView;
     private ImageView markerIconView;
-    private ViewToDrawableConverter converter;
+    private ViewToBitmapConverter converter;
 
     public MapMarker(String title, String subtitle, Drawable icon, LatLng coordinates) {
         this.title = title;
@@ -57,11 +56,12 @@ public class MapMarker{
         markerSubtitleView.setText(subtitle);
         markerIconView.setImageDrawable(icon);
 
-        converter = new ViewToDrawableConverter(context, markerLayout);
+        converter = new ViewToBitmapConverter(context, markerLayout);
         converter.run();
+
     }
 
     public Bitmap getMarkerBitmap() {
-        return converter.getDrawable();
+        return converter.getBitmap();
     }
 }

@@ -15,9 +15,6 @@ import android.widget.TextView;
 import com.bikov.testtask.R;
 import com.bikov.testtask.Service.LoginManager;
 
-/**
- * A login screen that offers login via login/password.
- */
 public class LoginActivity extends AppCompatActivity {
 
     private UserLoginTask mAuthTask = null;
