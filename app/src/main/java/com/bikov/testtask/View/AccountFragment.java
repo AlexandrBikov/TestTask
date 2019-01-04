@@ -81,8 +81,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     imageStartY = image.getY();
                 }
 
-                System.out.println(image.getY());
-
                 imageScale = offset / totalScrollRange + 1;
                 imageSize = (int) (imageStartSize * imageScale);
                 imageX = imageMargin * 2 + (backButtonSize - imageSize + imageMargin) * imageScale;

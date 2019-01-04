@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.bikov.testtask.R;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -38,8 +39,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
+
         MapDataManager dm = MapDataManager.getInstance(this.getContext());
         ArrayList<MapMarker> markerList = dm.getMarkerList().getList();
 
@@ -50,7 +51,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         for(MapMarker marker: markerList){
             mMap.addMarker(new MarkerOptions().position(marker.getCoordinates()).icon(BitmapDescriptorFactory.fromBitmap(marker.getMarkerBitmap())));
         }
-
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.9, 27.57), 10));
     }
 

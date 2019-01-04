@@ -20,6 +20,7 @@ public class MapMarker{
     private TextView markerSubtitleView;
     private ImageView markerIconView;
     private ViewToBitmapConverter converter;
+    private Thread converterThread;
 
     public MapMarker(String title, String subtitle, Drawable icon, LatLng coordinates) {
         this.title = title;
@@ -57,11 +58,15 @@ public class MapMarker{
         markerIconView.setImageDrawable(icon);
 
         converter = new ViewToBitmapConverter(context, markerLayout);
-        converter.run();
+        converterThread = new Thread(converter);
+        converterThread.start();
 
     }
 
     public Bitmap getMarkerBitmap() {
+        try {
+            converterThread.join();
+        } catch (InterruptedException e){}
         return converter.getBitmap();
     }
 }
