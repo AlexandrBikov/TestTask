@@ -3,6 +3,9 @@ package com.bikov.testtask.Service;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+
+import com.bikov.testtask.Entity.MapMarker;
+import com.bikov.testtask.Entity.MarkerList;
 import com.bikov.testtask.R;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -44,7 +47,6 @@ public class MapDataManager {
             markerList.add(getMarkerFromDB());
         } while (cursor.moveToNext());
 
-        cursor.close();
         return markerList;
     }
 

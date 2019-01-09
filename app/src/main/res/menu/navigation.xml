@@ -3,12 +3,16 @@
 
     <item
         android:id="@+id/navigation_map"
-        android:icon="@drawable/ic_map_black"
+        android:icon="@drawable/map_tab_icon"
         android:title="@string/title_map" />
 
     <item
-        android:id="@+id/navigation_account"
-        android:icon="@drawable/ic_account_black"
-        android:title="@string/title_account" />
+        android:id="@+id/navigation_markers"
+        android:icon="@drawable/markers_tab_icon"
+        android:title="@string/title_markers" />
 
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@drawable/account_tab_icon"
+        android:title="@string/title_account" />
 </menu>

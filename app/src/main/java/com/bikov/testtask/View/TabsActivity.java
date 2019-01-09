@@ -12,25 +12,31 @@ import com.bikov.testtask.R;
 
 public class TabsActivity extends AppCompatActivity {
 
-    Fragment accountFragment;
-    Fragment mapFragment;
-
-    View accountView;
-    View mapView;
+    private View accountView;
+    private View mapView;
+    private View listView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+        //TODO method to change visibility
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_map:
                     mapView.setVisibility(View.VISIBLE);
                     accountView.setVisibility(View.INVISIBLE);
+                    listView.setVisibility(View.INVISIBLE);
                     return true;
                 case R.id.navigation_account:
                     mapView.setVisibility(View.INVISIBLE);
                     accountView.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.INVISIBLE);
+                    return true;
+                case R.id.navigation_markers:
+                    mapView.setVisibility(View.INVISIBLE);
+                    accountView.setVisibility(View.INVISIBLE);
+                    listView.setVisibility(View.VISIBLE);
                     return true;
             }
             return false;
@@ -42,13 +48,16 @@ public class TabsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabs);
 
-        accountFragment = getSupportFragmentManager().findFragmentById(R.id.account);
-        mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
+        Fragment accountFragment = getSupportFragmentManager().findFragmentById(R.id.account);
+        Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
+        Fragment listFragment = getSupportFragmentManager().findFragmentById(R.id.list);
 
         accountView = accountFragment.getView();
         mapView = mapFragment.getView();
+        listView = listFragment.getView();
 
         accountView.setVisibility(View.INVISIBLE);
+        listView.setVisibility(View.INVISIBLE);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

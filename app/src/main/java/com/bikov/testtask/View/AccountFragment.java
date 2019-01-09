@@ -53,7 +53,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_account, null);
 
-        assignViewVariables();
+        initViewVariables();
 
         imageMarginParams = (ViewGroup.MarginLayoutParams) image.getLayoutParams();
 
@@ -109,7 +109,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void assignViewVariables() {
+    private void initViewVariables() {
         toolbar = rootView.findViewById(R.id.toolbar);
         image = rootView.findViewById(R.id.profile_image);
         appBarLayout = rootView.findViewById(R.id.appbar);

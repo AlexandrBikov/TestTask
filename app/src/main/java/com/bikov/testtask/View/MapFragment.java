@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.bikov.testtask.Service.MapDataManager;
-import com.bikov.testtask.Service.MapMarker;
-import com.bikov.testtask.Service.MarkerList;
+import com.bikov.testtask.Entity.MapMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.bikov.testtask.R;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -31,10 +30,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    mapView = (MapView)inflater.inflate(R.layout.fragment_map, null);
-    mapView.onCreate(savedInstanceState);
-    mapView.getMapAsync(this);
-    return mapView;
+        mapView = (MapView) inflater.inflate(R.layout.fragment_map, null);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+        return mapView;
     }
 
     @Override
@@ -44,11 +43,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         MapDataManager dm = MapDataManager.getInstance(this.getContext());
         ArrayList<MapMarker> markerList = dm.getMarkerList().getList();
 
-        for(MapMarker marker: markerList) {
+        for (MapMarker marker : markerList) {
             marker.convertToBitmap(getContext());
         }
 
-        for(MapMarker marker: markerList){
+        for (MapMarker marker : markerList) {
             mMap.addMarker(new MarkerOptions().position(marker.getCoordinates()).icon(BitmapDescriptorFactory.fromBitmap(marker.getMarkerBitmap())));
         }
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.9, 27.57), 10));

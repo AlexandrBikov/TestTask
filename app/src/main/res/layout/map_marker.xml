@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/marker"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingStart="60dp">
 
     <ImageView
-        android:id="@+id/background"
+        android:id="@+id/background_marker"
         android:layout_width="80dp"
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
@@ -15,13 +14,13 @@
         android:src="@drawable/map_marker" />
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/icon_marker"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="8dp"/>
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/title_marker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -29,7 +28,7 @@
         android:textSize="9sp"/>
 
     <TextView
-        android:id="@+id/subtitle"
+        android:id="@+id/subtitle_marker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"

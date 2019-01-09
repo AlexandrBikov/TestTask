@@ -1,4 +1,4 @@
-package com.bikov.testtask.Service;
+package com.bikov.testtask.Entity;
 
 import android.graphics.drawable.Drawable;
 

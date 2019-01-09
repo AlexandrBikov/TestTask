@@ -1,4 +1,4 @@
-package com.bikov.testtask.Service;
+package com.bikov.testtask.Entity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bikov.testtask.R;
+import com.bikov.testtask.Service.ViewToBitmapConverter;
 import com.google.android.gms.maps.model.LatLng;
 
 public class MapMarker{
@@ -49,9 +50,9 @@ public class MapMarker{
     public void convertToBitmap(Context context){
         View markerLayout = View.inflate(context, R.layout.map_marker, null);
 
-        markerIconView = markerLayout.findViewById(R.id.icon);
-        markerTitleView = markerLayout.findViewById(R.id.title);
-        markerSubtitleView = markerLayout.findViewById(R.id.subtitle);
+        markerIconView = markerLayout.findViewById(R.id.icon_marker);
+        markerTitleView = markerLayout.findViewById(R.id.title_marker);
+        markerSubtitleView = markerLayout.findViewById(R.id.subtitle_marker);
 
         markerTitleView.setText(title);
         markerSubtitleView.setText(subtitle);
