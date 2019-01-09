@@ -13,4 +13,10 @@
     <string name="title_map">Map</string>
     <string name="title_account">Account</string>
     <string name="title_markers">Markers</string>
+    <string name="add_marker_positive">Done</string>
+    <string name="add_marker_negative">Cancel</string>
+    <string name="dialog_title">Title: </string>
+    <string name="dialog_subtitle">Subtitle: </string>
+    <string name="dialog_coordinates">Coordinates: </string>
+    <string name="dialog_icon">Icon: </string>
 </resources>
