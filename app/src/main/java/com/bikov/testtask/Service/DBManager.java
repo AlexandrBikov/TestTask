@@ -17,7 +17,6 @@ public class DBManager {
     public DBManager(Context context){
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
-        db.delete("markers", null, null);
         values = new ArrayList<>();
     }
 

@@ -9,30 +9,32 @@ import android.widget.TextView;
 
 import com.bikov.testtask.R;
 import com.bikov.testtask.Service.ViewToBitmapConverter;
-import com.google.android.gms.maps.model.LatLng;
 
 public class MapMarker{
 
     private String title;
     private String subtitle;
     private Drawable icon;
-    private LatLng coordinates;
-    private TextView markerTitleView;
-    private TextView markerSubtitleView;
-    private ImageView markerIconView;
     private ViewToBitmapConverter converter;
+    private double lat;
+    private double lng;
     private Thread converterThread;
+    private Bitmap bitmap;
 
-    public MapMarker(String title, String subtitle, Drawable icon, LatLng coordinates) {
+    public MapMarker(String title, String subtitle, Drawable icon, double lat, double lng) {
         this.title = title;
         this.subtitle = subtitle;
         this.icon = icon;
-        this.coordinates = coordinates;
-
+        this.lat = lat;
+        this.lng = lng;
     }
 
-    public LatLng getCoordinates() {
-        return coordinates;
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLng() {
+        return lng;
     }
 
     public String getTitle() {
@@ -48,26 +50,31 @@ public class MapMarker{
     }
 
     public void convertToBitmap(Context context){
-        View markerLayout = View.inflate(context, R.layout.map_marker, null);
+        if(bitmap == null) {
+            View markerLayout = View.inflate(context, R.layout.map_marker, null);
 
-        markerIconView = markerLayout.findViewById(R.id.icon_marker);
-        markerTitleView = markerLayout.findViewById(R.id.title_marker);
-        markerSubtitleView = markerLayout.findViewById(R.id.subtitle_marker);
+            ImageView markerIconView = markerLayout.findViewById(R.id.icon_marker);
+            TextView markerTitleView = markerLayout.findViewById(R.id.title_marker);
+            TextView markerSubtitleView = markerLayout.findViewById(R.id.subtitle_marker);
 
-        markerTitleView.setText(title);
-        markerSubtitleView.setText(subtitle);
-        markerIconView.setImageDrawable(icon);
+            markerTitleView.setText(title);
+            markerSubtitleView.setText(subtitle);
+            markerIconView.setImageDrawable(icon);
 
-        converter = new ViewToBitmapConverter(context, markerLayout);
-        converterThread = new Thread(converter);
-        converterThread.start();
-
+            converter = new ViewToBitmapConverter(context, markerLayout);
+            converterThread = new Thread(converter);
+            converterThread.start();
+        }
     }
 
     public Bitmap getMarkerBitmap() {
+        if(bitmap != null){
+            return bitmap;
+        }
         try {
             converterThread.join();
         } catch (InterruptedException e){}
-        return converter.getBitmap();
+        bitmap = converter.getBitmap();
+        return bitmap;
     }
 }

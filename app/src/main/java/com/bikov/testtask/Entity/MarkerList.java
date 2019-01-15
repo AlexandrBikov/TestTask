@@ -2,8 +2,6 @@ package com.bikov.testtask.Entity;
 
 import android.graphics.drawable.Drawable;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 
 public class MarkerList {
@@ -21,8 +19,8 @@ public class MarkerList {
         markerList.add(marker);
     }
 
-    public void add(String title, String subtitle, Drawable icon, LatLng coordinates){
-        markerList.add(new MapMarker(title, subtitle, icon, coordinates));
+    public void add(String title, String subtitle, Drawable icon, double lat, double lng){
+        markerList.add(new MapMarker(title, subtitle, icon, lat, lng));
     }
 
     public ArrayList<MapMarker> getList() {

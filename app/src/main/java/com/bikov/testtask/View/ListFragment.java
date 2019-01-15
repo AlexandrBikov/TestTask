@@ -13,16 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.bikov.testtask.Entity.MapMarker;
 import com.bikov.testtask.Entity.MarkerList;
 import com.bikov.testtask.R;
 import com.bikov.testtask.Service.MapDataManager;
 import com.bikov.testtask.Service.RVAdapter;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.List;
 
 public class ListFragment extends Fragment implements View.OnClickListener {
 
@@ -73,7 +68,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         Double latD = Double.parseDouble((lat.getText()).toString());
                         Double lngD = Double.parseDouble((lng.getText()).toString());
-                        markers.add(title.getText().toString(), subtitle.getText().toString(), getResources().getDrawable(R.drawable.putin), new LatLng(latD, lngD));
+                        markers.add(title.getText().toString(), subtitle.getText().toString(), getResources().getDrawable(R.drawable.putin), latD, lngD);
                         dialog.dismiss();
                     }
                 })

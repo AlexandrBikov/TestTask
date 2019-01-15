@@ -53,9 +53,9 @@ public class TabsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabs);
 
-        Fragment accountFragment = getSupportFragmentManager().findFragmentById(R.id.account);
-        Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
-        Fragment listFragment = getSupportFragmentManager().findFragmentById(R.id.list);
+        Fragment accountFragment = getSupportFragmentManager().findFragmentById(R.id.account_fragment);
+        Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+        Fragment listFragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment);
 
         accountView = accountFragment.getView();
         mapView = mapFragment.getView();

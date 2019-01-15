@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import com.bikov.testtask.Entity.MapMarker;
 import com.bikov.testtask.Entity.MarkerList;
 import com.bikov.testtask.R;
-import com.google.android.gms.maps.model.LatLng;
 
 public class MapDataManager {
     private static MapDataManager instance;
@@ -19,6 +18,7 @@ public class MapDataManager {
     private Context context;
     private Cursor cursor;
     private DBManager dbManager;
+    private MarkerList markerList;
 
     public static synchronized MapDataManager getInstance(Context context) {
         if(instance == null) {
@@ -37,17 +37,29 @@ public class MapDataManager {
         dbManager.commit();
     }
 
+    public void addMarker(String title, String subtitle, Drawable icon, double lat, double lng){
+       // dbManager.addMarkerToDB(title, subtitle, );
+    }
+
     public MarkerList getMarkerList() {
-        cursor = dbManager.getCursor();
-        MarkerList markerList = new MarkerList();
+        if(markerList == null) {
+            cursor = dbManager.getCursor();
+            markerList = new MarkerList();
 
-        setColumnIndexes();
-        cursor.moveToFirst();
-        do{
-            markerList.add(getMarkerFromDB());
-        } while (cursor.moveToNext());
-
+            setColumnIndexes();
+            cursor.moveToFirst();
+            do {
+                markerList.add(getMarkerFromDB());
+            } while (cursor.moveToNext());
+            convertMarkersToBitmap();
+        }
         return markerList;
+    }
+
+    private void convertMarkersToBitmap(){
+        for (MapMarker marker : markerList.getList()) {
+            marker.convertToBitmap(context);
+        }
     }
 
     private void setColumnIndexes(){
@@ -60,7 +72,6 @@ public class MapDataManager {
 
     private MapMarker getMarkerFromDB(){
         Drawable icon = context.getResources().getDrawable(cursor.getInt(iconIDIndex));
-        LatLng latLng = new LatLng(cursor.getDouble(latIndex), cursor.getDouble(lngIndex));
-        return new MapMarker(cursor.getString(titleIndex), cursor.getString(subtitleIndex), icon, latLng);
+        return new MapMarker(cursor.getString(titleIndex), cursor.getString(subtitleIndex), icon, cursor.getDouble(latIndex), cursor.getDouble(lngIndex));
     }
 }

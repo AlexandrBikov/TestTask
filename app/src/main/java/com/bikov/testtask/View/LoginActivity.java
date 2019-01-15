@@ -1,9 +1,9 @@
 package com.bikov.testtask.View;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.bikov.testtask.R;
 import com.bikov.testtask.Service.LoginManager;
 
@@ -24,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+         setContentView(R.layout.activity_login);
 
         mLoginView = findViewById(R.id.login);
         mPasswordView = findViewById(R.id.password);
