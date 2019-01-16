@@ -1,7 +1,6 @@
 package com.bikov.testtask.Service;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -24,20 +23,33 @@ public class MapboxManager implements OnMapReadyCallback, MapManager {
     private Context context;
     private ArrayList<MapMarker> markerList;
     private MapboxMap map;
+    private IconFactory iconFactory;
+    private static MapboxManager instance;
 
-    public MapboxManager(Context context, Bundle savedInstanceState) {
+    public static synchronized MapboxManager getInstance() {
+        return instance;
+    }
+
+    public static synchronized MapboxManager getInstance(Context context, ArrayList<MapMarker> markerList) {
+        if(instance == null) {
+            instance = new MapboxManager(context, markerList);
+        }
+        return instance;
+    }
+
+    private MapboxManager(Context context, ArrayList<MapMarker> markerList) {
+        this.markerList = markerList;
         this.context = context;
 
         Mapbox.getInstance(context.getApplicationContext(), context.getString(R.string.mapbox_access_token));
+        iconFactory = IconFactory.getInstance(context);
 
-        initMapView(savedInstanceState);
-        initMarkerList();
+        initMapView(null);
     }
 
     @Override
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
         map = mapboxMap;
-        IconFactory iconFactory = IconFactory.getInstance(context);
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
@@ -46,19 +58,17 @@ public class MapboxManager implements OnMapReadyCallback, MapManager {
             }
         });
         for (MapMarker marker : markerList) {
-            LatLng coordinates = new LatLng(marker.getLat(), marker.getLng());
-            mapboxMap.addMarker(new MarkerOptions().icon(iconFactory.fromBitmap(marker.getMarkerBitmap())).position(coordinates));
+            addMarker(marker);
         }
     }
 
     @Override
-    public void addMarker(String title, String subtitle, Drawable icon, double lat, double lng){
-
-    }
-
-    private void initMarkerList() {
-        MapDataManager dm = MapDataManager.getInstance(context);
-        markerList = dm.getMarkerList().getList();
+    public void addMarker(MapMarker marker){
+        LatLng coordinates = new LatLng(marker.getLat(), marker.getLng());
+        if(!marker.hasBitmap()){
+            marker.convertToBitmap(context);
+        }
+        map.addMarker(new MarkerOptions().icon(iconFactory.fromBitmap(marker.getMarkerBitmap())).position(coordinates));
     }
 
     private void initMapView(Bundle savedInstanceState) {

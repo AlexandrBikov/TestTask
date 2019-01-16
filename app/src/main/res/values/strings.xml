@@ -21,6 +21,7 @@
     <string name="dialog_icon">Icon: </string>
     <string name="google_maps_menu_item">Google Maps</string>
     <string name="mapbox_menu_item">Mapbox</string>
+    <string name="add_marker">Add marker</string>
 
     <string name="mapbox_access_token">pk.eyJ1Ijoic2Nyb2xsZW5kIiwiYSI6ImNqcXFkMmFicjBiM2M0MXBlbHVkMW0yajkifQ.d53GioBW2Pu7SAWP7B220Q</string>
 </resources>

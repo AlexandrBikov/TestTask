@@ -7,16 +7,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context){
-        super(context,"myDB", null, 1);
+        super(context,"myDB", null, 6);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table markers (id integer primary key autoincrement, title text, subtitle text, lat real, lng real, iconID integer, hash integer)");
+        db.execSQL("create table markers (id integer primary key autoincrement, title text, subtitle text, lat real, lng real, icon blob, hash integer)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("drop table markers");
+        db.execSQL("create table markers (id integer primary key autoincrement, title text, subtitle text, lat real, lng real, icon blob, hash integer)");
     }
 }

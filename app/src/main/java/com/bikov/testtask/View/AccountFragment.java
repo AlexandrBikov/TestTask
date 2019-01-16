@@ -3,8 +3,10 @@ package com.bikov.testtask.View;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.bikov.testtask.R;
+
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -179,9 +183,19 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 uri = resultData.getData();
             }
             imageAdded = true;
-            image.setImageURI(uri);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+                image.setImageBitmap(compressImage(bitmap));
+            } catch (IOException e){}
         }
 
+    }
+
+    private Bitmap compressImage(Bitmap image){
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        return Bitmap.createScaledBitmap(image, width/4, height/4, false);
     }
 
     public static void hideKeyboard(Context context, View view) {

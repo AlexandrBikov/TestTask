@@ -2,7 +2,8 @@ package com.bikov.testtask.Service;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.bikov.testtask.Entity.MapMarker;
 import com.bikov.testtask.Entity.MarkerList;
@@ -12,16 +13,18 @@ public class MapDataManager {
     private static MapDataManager instance;
     private int titleIndex;
     private int subtitleIndex;
-    private int iconIDIndex;
+    private int iconIndex;
     private int latIndex;
     private int lngIndex;
     private Context context;
     private Cursor cursor;
     private DBManager dbManager;
     private MarkerList markerList;
+    private MapboxManager mapboxManager;
+    private GoogleMapsManager googleMapsManager;
 
     public static synchronized MapDataManager getInstance(Context context) {
-        if(instance == null) {
+        if (instance == null) {
             instance = new MapDataManager(context);
         }
         return instance;
@@ -31,18 +34,37 @@ public class MapDataManager {
         this.context = context;
         dbManager = new DBManager(context);
 
-        dbManager.addMarkerToDB("5 Элемент", "Независимости 117", R.drawable.putin, 53.9305300, 27.6346841);
-        dbManager.addMarkerToDB("5 Элемент", "кульман 14", R.drawable.putin, 53.9210960, 27.5816002);
-        dbManager.addMarkerToDB("5 Элемент", "Дзержинского 104", R.drawable.putin, 53.8610232, 27.4798459);
+        addDataToDB();
+
+        markerList = getMarkerList();
+
+        initMapsManagers();
+    }
+
+    private void addDataToDB() {
+        Bitmap putin = BitmapFactory.decodeResource(context.getResources(), R.drawable.putin);
+
+        dbManager.addMarkerToDB(new MapMarker("5 Элемент", "Независимости 117",putin, 53.9305300, 27.6346841));
+        dbManager.addMarkerToDB(new MapMarker("5 Элемент", "кульман 14", putin, 53.9210960, 27.5816002));
+        dbManager.addMarkerToDB(new MapMarker("5 Элемент", "Дзержинского 104", putin, 53.8610232, 27.4798459));
         dbManager.commit();
     }
 
-    public void addMarker(String title, String subtitle, Drawable icon, double lat, double lng){
-       // dbManager.addMarkerToDB(title, subtitle, );
+    private void initMapsManagers(){
+        mapboxManager = MapboxManager.getInstance(context, markerList.getList());
+        googleMapsManager = GoogleMapsManager.getInstance(context, markerList.getList());
+    }
+
+    public void addMarker(MapMarker marker) {
+        dbManager.addMarkerToDB(marker);
+        dbManager.commit();
+        markerList.add(marker);
+        mapboxManager.addMarker(marker);
+        googleMapsManager.addMarker(marker);
     }
 
     public MarkerList getMarkerList() {
-        if(markerList == null) {
+        if (markerList == null) {
             cursor = dbManager.getCursor();
             markerList = new MarkerList();
 
@@ -56,22 +78,23 @@ public class MapDataManager {
         return markerList;
     }
 
-    private void convertMarkersToBitmap(){
+    private void convertMarkersToBitmap() {
         for (MapMarker marker : markerList.getList()) {
             marker.convertToBitmap(context);
         }
     }
 
-    private void setColumnIndexes(){
+    private void setColumnIndexes() {
         titleIndex = cursor.getColumnIndex("title");
         subtitleIndex = cursor.getColumnIndex("subtitle");
-        iconIDIndex = cursor.getColumnIndex("iconID");
+        iconIndex = cursor.getColumnIndex("icon");
         latIndex = cursor.getColumnIndex("lat");
         lngIndex = cursor.getColumnIndex("lng");
     }
 
-    private MapMarker getMarkerFromDB(){
-        Drawable icon = context.getResources().getDrawable(cursor.getInt(iconIDIndex));
+    private MapMarker getMarkerFromDB() {
+        byte[] byteArray = cursor.getBlob(iconIndex);
+        Bitmap icon = BitmapFactory.decodeByteArray(byteArray, 0 ,byteArray.length);
         return new MapMarker(cursor.getString(titleIndex), cursor.getString(subtitleIndex), icon, cursor.getDouble(latIndex), cursor.getDouble(lngIndex));
     }
 }

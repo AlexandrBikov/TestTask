@@ -21,6 +21,6 @@
         android:src="@drawable/add_marker_icon"
         android:clickable="true"
         android:focusable="true"
-        android:layout_margin="@dimen/activity_vertical_margin"/>
+        android:layout_margin="8dp"/>
 
 </android.support.constraint.ConstraintLayout>

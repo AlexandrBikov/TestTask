@@ -13,8 +13,10 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
+import com.bikov.testtask.Entity.MapMarker;
 import com.bikov.testtask.R;
 import com.bikov.testtask.Service.GoogleMapsManager;
+import com.bikov.testtask.Service.MapDataManager;
 import com.bikov.testtask.Service.MapManager;
 import com.bikov.testtask.Service.MapboxManager;
 
@@ -27,15 +29,16 @@ public class MapFragment extends Fragment implements View.OnClickListener, Popup
     private PopupMenu menu;
     private ImageButton menuButton;
     private RelativeLayout rootView;
-    private Bundle savedInstanceState;
     private View googleMapsView;
     private View mapboxView;
+    private MapDataManager dataManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_map, null);
-        this.savedInstanceState = savedInstanceState;
+
+        dataManager = MapDataManager.getInstance(getContext());
 
         initGoogleMaps();
         initMapbox();
@@ -47,12 +50,12 @@ public class MapFragment extends Fragment implements View.OnClickListener, Popup
     }
 
     private void initGoogleMaps() {
-        googleMapsManager = new GoogleMapsManager(getContext(), savedInstanceState);
+        googleMapsManager = GoogleMapsManager.getInstance();
         googleMapsView = googleMapsManager.getMapView();
     }
 
     private void initMapbox() {
-        mapboxManager = new MapboxManager(getContext(), savedInstanceState);
+        mapboxManager = MapboxManager.getInstance();
         mapboxView = mapboxManager.getMapView();
     }
 
@@ -82,6 +85,16 @@ public class MapFragment extends Fragment implements View.OnClickListener, Popup
         menu.show();
     }
 
+    private void startAddMarkerDialog() {
+        AddMarkerDialog addMarkerDialog = new AddMarkerDialog(getContext());
+        addMarkerDialog.showDialog(new AddMarkerDialog.Callback() {
+            @Override
+            public void onSuccess(MapMarker marker) {
+                dataManager.addMarker(marker);
+            }
+        });
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         item.setChecked(true);
@@ -92,6 +105,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, Popup
             case R.id.menu_mapbox:
                 changeToMapbox();
                 break;
+            case R.id.add_marker_button:
+                startAddMarkerDialog();
+                break;
         }
         return true;
     }
@@ -99,10 +115,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, Popup
     private void changeToMapbox() {
         mapboxView.setVisibility(View.VISIBLE);
         googleMapsView.setVisibility(View.INVISIBLE);
-    }
-
-    private void addMarker() {
-
     }
 
     private void changeToGoogleMaps() {

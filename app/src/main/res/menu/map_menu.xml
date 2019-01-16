@@ -7,4 +7,6 @@
         <item android:id="@+id/menu_mapbox"
             android:title="@string/mapbox_menu_item"/>
     </group>
+    <item android:id="@+id/add_marker_button"
+        android:title="@string/add_marker"/>
 </menu>

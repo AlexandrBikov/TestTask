@@ -1,7 +1,6 @@
 package com.bikov.testtask.Service;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -20,38 +19,50 @@ public class GoogleMapsManager implements OnMapReadyCallback, MapManager {
     private MapView mapView;
     private Context context;
     private ArrayList<MapMarker> markerList;
+    private GoogleMap map;
+    private static GoogleMapsManager instance;
 
-    public GoogleMapsManager(Context context, Bundle savedInstanceState) {
+    public static synchronized GoogleMapsManager getInstance() {
+        return instance;
+    }
+
+    public static synchronized GoogleMapsManager getInstance(Context context, ArrayList<MapMarker> markerList) {
+        if(instance == null) {
+            instance = new GoogleMapsManager(context, markerList);
+        }
+        return instance;
+    }
+
+    private GoogleMapsManager(Context context, ArrayList<MapMarker> markerList) {
         this.context = context;
+        this.markerList = markerList;
 
-        initMapView(savedInstanceState);
-        initMarkerList();
+        initMapView(null);
     }
 
     @Override
     public void onMapReady(GoogleMap mMap) {
+        map = mMap;
 
         for (MapMarker marker : markerList) {
-            LatLng coordinates = new LatLng(marker.getLat(), marker.getLng());
-            mMap.addMarker(new MarkerOptions().position(coordinates).icon(BitmapDescriptorFactory.fromBitmap(marker.getMarkerBitmap())));
+            addMarker(marker);
         }
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.9, 27.57), 10));
     }
 
     @Override
-    public void addMarker(String title, String subtitle, Drawable icon, double lat, double lng){
-
+    public void addMarker(MapMarker marker){
+        LatLng coordinates = new LatLng(marker.getLat(), marker.getLng());
+        if(!marker.hasBitmap()){
+            marker.convertToBitmap(context);
+        }
+        map.addMarker(new MarkerOptions().position(coordinates).icon(BitmapDescriptorFactory.fromBitmap(marker.getMarkerBitmap())));
     }
 
     private void initMapView(Bundle savedInstanceState){
         mapView = new MapView(context);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-    }
-
-    private void initMarkerList(){
-        MapDataManager dm = MapDataManager.getInstance(context);
-        markerList = dm.getMarkerList().getList();
     }
 
     public View getMapView() {

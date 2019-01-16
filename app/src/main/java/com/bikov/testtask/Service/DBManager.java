@@ -5,43 +5,37 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.bikov.testtask.Entity.MapMarker;
+
 import java.util.ArrayList;
 
 public class DBManager {
-    private DBHelper dbHelper;
     private SQLiteDatabase db;
-    private ArrayList<ContentValues> values;
+    private ArrayList<MapMarker> markers;
     private Thread thread;
     private Cursor cursor;
 
-    public DBManager(Context context){
-        dbHelper = new DBHelper(context);
+    public DBManager(Context context) {
+        DBHelper dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
-        values = new ArrayList<>();
+        markers = new ArrayList<>();
     }
 
-    public void addMarkerToDB(String title, String subtitle, int iconID, double lat, double lng){
-        ContentValues cv = new ContentValues();
-        cv.put("title", title);
-        cv.put("subtitle", subtitle);
-        cv.put("iconID", iconID);
-        cv.put("lat", lat);
-        cv.put("lng", lng);
-        values.add(cv);
+    public void addMarkerToDB(MapMarker marker) {
+        markers.add(marker);
     }
 
-    public void commit(){
+    public void commit() {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                for(ContentValues cv : values) {
-                    int hash = cv.hashCode();
-                    Cursor c = db.query("markers", null, "hash=" + hash, null, null, null, null);
-                    if (!c.moveToFirst()) {
-                        cv.put("hash", hash);
-                        db.insert("markers", null, cv);
+                Cursor c = db.query("markers", new String[]{"hash"}, null, null, null, null, null);
+                ArrayList<Integer> hashes = getHashes(c);
+                c.close();
+                for (MapMarker marker : markers) {
+                    if (!hashes.contains(marker.getHash())) {
+                        db.insert("markers", null, makeCV(marker));
                     }
-                    c.close();
                 }
                 cursor = db.query("markers", null, null, null, null, null, null);
             }
@@ -49,10 +43,33 @@ public class DBManager {
         thread.start();
     }
 
-    public Cursor getCursor(){
+    private ArrayList<Integer> getHashes(Cursor c) {
+        int hashIndex = c.getColumnIndex("hash");
+        ArrayList<Integer> hashes = new ArrayList<>();
+        if (c.moveToFirst()) {
+            do {
+                hashes.add(c.getInt(hashIndex));
+            } while (c.moveToNext());
+        }
+        return hashes;
+    }
+
+    private ContentValues makeCV(MapMarker marker) {
+        ContentValues cv = new ContentValues();
+        cv.put("title", marker.getTitle());
+        cv.put("subtitle", marker.getSubtitle());
+        cv.put("icon", marker.getBlobIcon());
+        cv.put("lat", marker.getLat());
+        cv.put("lng", marker.getLng());
+        cv.put("hash", marker.getHash());
+        return cv;
+    }
+
+    public Cursor getCursor() {
         try {
             thread.join();
-        } catch (InterruptedException e){}
+        } catch (InterruptedException e) {
+        }
         return cursor;
     }
 }

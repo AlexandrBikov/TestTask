@@ -1,6 +1,6 @@
 package com.bikov.testtask.Entity;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class MarkerList {
         markerList.add(marker);
     }
 
-    public void add(String title, String subtitle, Drawable icon, double lat, double lng){
+    public void add(String title, String subtitle, Bitmap icon, double lat, double lng){
         markerList.add(new MapMarker(title, subtitle, icon, lat, lng));
     }
 
