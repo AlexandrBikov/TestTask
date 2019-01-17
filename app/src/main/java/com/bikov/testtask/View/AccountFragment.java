@@ -64,7 +64,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         editButton.setOnClickListener(this);
         image.setOnClickListener(this);
 
-        makeFieldsNonEditable();
+        changeFieldsInputType(InputType.TYPE_NULL);
         setImageAnimation();
 
         return rootView;
@@ -129,12 +129,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         if (editModeOn) {
             editModeOn = false;
             setIconsToNonEditMode();
-            makeFieldsNonEditable();
+            changeFieldsInputType(InputType.TYPE_NULL);
             hideKeyboard(getContext(), nameField);
         } else {
             editModeOn = true;
             setIconsToEditMode();
-            makeFieldsEditable();
+            changeFieldsInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         }
     }
 
@@ -152,18 +152,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void makeFieldsEditable() {
-        nameField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        bioField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        loginField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        phoneField.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-    }
-
-    private void makeFieldsNonEditable() {
-        nameField.setInputType(InputType.TYPE_NULL);
-        bioField.setInputType(InputType.TYPE_NULL);
-        loginField.setInputType(InputType.TYPE_NULL);
-        phoneField.setInputType(InputType.TYPE_NULL);
+    private void changeFieldsInputType(int inputType) {
+        nameField.setInputType(inputType);
+        bioField.setInputType(inputType);
+        loginField.setInputType(inputType);
+        phoneField.setInputType(inputType);
     }
 
     private void changeProfileImage() {
