@@ -51,6 +51,15 @@ public class GoogleMapsManager implements OnMapReadyCallback, MapManager {
     }
 
     @Override
+    public void delete(MapMarker marker){
+        markerList.remove(marker);
+        map.clear();
+        for(MapMarker mapMarker : markerList){
+            addMarker(mapMarker);
+        }
+    }
+
+    @Override
     public void addMarker(MapMarker marker){
         LatLng coordinates = new LatLng(marker.getLat(), marker.getLng());
         if(!marker.hasBitmap()){

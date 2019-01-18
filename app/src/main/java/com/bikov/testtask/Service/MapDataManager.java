@@ -9,6 +9,8 @@ import com.bikov.testtask.Entity.MapMarker;
 import com.bikov.testtask.Entity.MarkerList;
 import com.bikov.testtask.R;
 
+import java.util.ArrayList;
+
 public class MapDataManager {
     private static MapDataManager instance;
     private int titleIndex;
@@ -44,38 +46,53 @@ public class MapDataManager {
     private void addDataToDB() {
         Bitmap putin = BitmapFactory.decodeResource(context.getResources(), R.drawable.putin);
 
-        dbManager.addMarkerToDB(new MapMarker("5 Элемент", "Независимости 117",putin, 53.9305300, 27.6346841));
+        dbManager.addMarkerToDB(new MapMarker("5 Элемент", "Независимости 117", putin, 53.9305300, 27.6346841));
         dbManager.addMarkerToDB(new MapMarker("5 Элемент", "кульман 14", putin, 53.9210960, 27.5816002));
         dbManager.addMarkerToDB(new MapMarker("5 Элемент", "Дзержинского 104", putin, 53.8610232, 27.4798459));
         dbManager.commit();
     }
 
-    private void initMapsManagers(){
+    private void initMapsManagers() {
         mapboxManager = MapboxManager.getInstance(context, markerList.getList());
         googleMapsManager = GoogleMapsManager.getInstance(context, markerList.getList());
     }
 
-    public void addMarker(MapMarker marker) {
+    public ArrayList<MapMarker> deleteMarker(MapMarker marker) {
+        dbManager.delete(marker.getHash());
+        markerList.delete(marker);
+        mapboxManager.delete(marker);
+        googleMapsManager.delete(marker);
+        return markerList.getList();
+    }
+
+    public ArrayList<MapMarker> addMarker(MapMarker marker) {
         dbManager.addMarkerToDB(marker);
         dbManager.commit();
         markerList.add(marker);
         mapboxManager.addMarker(marker);
         googleMapsManager.addMarker(marker);
+        return markerList.getList();
     }
 
     public MarkerList getMarkerList() {
         if (markerList == null) {
             cursor = dbManager.getCursor();
             markerList = new MarkerList();
+            if(cursor != null) {
+                makeList();
+            }
+        }
+        return markerList;
+    }
 
+    private void makeList() {
+        if (cursor.moveToFirst()) {
             setColumnIndexes();
-            cursor.moveToFirst();
             do {
                 markerList.add(getMarkerFromDB());
             } while (cursor.moveToNext());
             convertMarkersToBitmap();
         }
-        return markerList;
     }
 
     private void convertMarkersToBitmap() {
@@ -94,7 +111,7 @@ public class MapDataManager {
 
     private MapMarker getMarkerFromDB() {
         byte[] byteArray = cursor.getBlob(iconIndex);
-        Bitmap icon = BitmapFactory.decodeByteArray(byteArray, 0 ,byteArray.length);
+        Bitmap icon = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         return new MapMarker(cursor.getString(titleIndex), cursor.getString(subtitleIndex), icon, cursor.getDouble(latIndex), cursor.getDouble(lngIndex));
     }
 }

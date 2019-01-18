@@ -34,7 +34,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Popup
     private View googleMapsView;
     private View mapboxView;
     private MapDataManager dataManager;
-    private AddMarkerDialog addMarkerDialog;
+    private EditMarkerDialog editMarkerDialog;
 
     private static final int READ_REQUEST_CODE = 42;
 
@@ -91,8 +91,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, Popup
     }
 
     private void startAddMarkerDialog() {
-        addMarkerDialog = new AddMarkerDialog(getContext(), this);
-        addMarkerDialog.showDialog(new AddMarkerDialog.Callback() {
+        editMarkerDialog = new EditMarkerDialog(getContext(), this);
+        editMarkerDialog.showDialog(new EditMarkerDialog.Callback() {
             @Override
             public void onSuccess(MapMarker marker) {
                 dataManager.addMarker(marker);
@@ -104,7 +104,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Popup
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (resultData != null) {
-                addMarkerDialog.setIconUri(resultData.getData());
+                editMarkerDialog.setIconUri(resultData.getData());
             }
         }
     }

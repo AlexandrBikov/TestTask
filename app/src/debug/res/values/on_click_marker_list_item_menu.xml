@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="marker_menu">
+        <item>@string/edit_marker</item>
+        <item>@string/delete_marker</item>
+        <item>@string/add_marker_negative</item>
+    </array>
+</resources>

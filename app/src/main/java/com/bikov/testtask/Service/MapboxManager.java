@@ -71,6 +71,15 @@ public class MapboxManager implements OnMapReadyCallback, MapManager {
         map.addMarker(new MarkerOptions().icon(iconFactory.fromBitmap(marker.getMarkerBitmap())).position(coordinates));
     }
 
+    @Override
+    public void delete(MapMarker marker){
+        markerList.remove(marker);
+        map.clear();
+        for(MapMarker mapMarker : markerList){
+            addMarker(mapMarker);
+        }
+    }
+
     private void initMapView(Bundle savedInstanceState) {
         mapView = new MapView(context);
         mapView.onCreate(savedInstanceState);

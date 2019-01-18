@@ -19,7 +19,7 @@ import com.bikov.testtask.R;
 
 import java.io.IOException;
 
-public class AddMarkerDialog implements View.OnClickListener {
+public class EditMarkerDialog implements View.OnClickListener {
     private AlertDialog.Builder addMarkerDialog;
     private Context context;
     private View dialogView;
@@ -38,17 +38,38 @@ public class AddMarkerDialog implements View.OnClickListener {
     private String lngS;
     private View focusView;
     private boolean error;
+    private MapMarker marker;
 
     private static final int READ_REQUEST_CODE = 42;
 
-    public AddMarkerDialog(Context context, Fragment fragment) {
+    public EditMarkerDialog(Context context, Fragment fragment, MapMarker marker){
+        this.marker = marker;
+        icon = marker.getIcon();
+        initFields(context, fragment);
+        setViewFields();
+    }
+
+    public EditMarkerDialog(Context context, Fragment fragment) {
+        icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.no_photo_icon);
+        initFields(context, fragment);
+    }
+
+    private void setViewFields(){
+        titleView.setText(marker.getTitle());
+        subtitleView.setText(marker.getSubtitle());
+        lngView.setText(String.valueOf(marker.getLng()));
+        latView.setText(String.valueOf(marker.getLat()));
+    }
+
+    private void initFields(Context context, Fragment fragment){
         this.context = context;
         this.fragment = fragment;
 
-        icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.no_photo_icon);
+        initViewFields();
+
+        iconView.setImageBitmap(icon);
 
         addMarkerDialog = new AlertDialog.Builder(context);
-        initViewFields();
         iconView.setOnClickListener(this);
     }
 

@@ -43,6 +43,10 @@ public class DBManager {
         thread.start();
     }
 
+    public void delete(int hash) {
+        db.delete("markers", "hash = '" + hash + "'", null);
+    }
+
     private ArrayList<Integer> getHashes(Cursor c) {
         int hashIndex = c.getColumnIndex("hash");
         ArrayList<Integer> hashes = new ArrayList<>();
@@ -66,9 +70,11 @@ public class DBManager {
     }
 
     public Cursor getCursor() {
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
+        if (thread != null) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+            }
         }
         return cursor;
     }

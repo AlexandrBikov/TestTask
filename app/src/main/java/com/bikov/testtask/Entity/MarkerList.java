@@ -23,6 +23,10 @@ public class MarkerList {
         markerList.add(new MapMarker(title, subtitle, icon, lat, lng));
     }
 
+    public void delete(MapMarker marker){
+        markerList.remove(marker);
+    }
+
     public ArrayList<MapMarker> getList() {
         return markerList;
     }

@@ -1,6 +1,8 @@
 package com.bikov.testtask.View;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,7 +29,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     private RVAdapter adapter;
     private View rootView;
     private MapDataManager dataManager;
-    private AddMarkerDialog addMarkerDialog;
+    private EditMarkerDialog editMarkerDialog;
 
     private static final int READ_REQUEST_CODE = 42;
 
@@ -41,27 +43,57 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         putData();
         initAddMarkerDialog();
 
+
         return rootView;
     }
 
-    private void initMarkerList(){
+    private void initMarkerList() {
         dataManager = MapDataManager.getInstance(getContext());
         markers = dataManager.getMarkerList().getList();
     }
 
-    private void initListView(){
+    private void initListView() {
         list = rootView.findViewById(R.id.rv);
         LinearLayoutManager listManager = new LinearLayoutManager(getContext());
         list.setLayoutManager(listManager);
         list.setHasFixedSize(true);
     }
 
-    private void putData(){
-        adapter = new RVAdapter(markers);
+    private void putData() {
+        final Fragment fragment = this;
+        adapter = new RVAdapter(markers, new RVAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(final MapMarker marker) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setItems(R.array.marker_menu, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                editMarkerDialog = new EditMarkerDialog(getContext(), fragment, marker);
+                                editMarkerDialog.showDialog(new EditMarkerDialog.Callback() {
+                                    @Override
+                                    public void onSuccess(MapMarker newMarker) {
+                                        dataManager.deleteMarker(marker);
+                                        markers = dataManager.addMarker(newMarker);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
+                                break;
+                            case 1:
+                                markers = dataManager.deleteMarker(marker);
+                                adapter.notifyDataSetChanged();
+                                break;
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
         list.setAdapter(adapter);
     }
 
-    private void initAddMarkerDialog(){
+    private void initAddMarkerDialog() {
         FloatingActionButton addMarkerButton = rootView.findViewById(R.id.add_marker_button);
         addMarkerButton.setOnClickListener(this);
     }
@@ -72,9 +104,9 @@ public class ListFragment extends Fragment implements View.OnClickListener {
         adapter.notifyDataSetChanged();
     }
 
-    private void startAddMarkerDialog(){
-        addMarkerDialog = new AddMarkerDialog(getContext(), this);
-        addMarkerDialog.showDialog(new AddMarkerDialog.Callback() {
+    private void startAddMarkerDialog() {
+        editMarkerDialog = new EditMarkerDialog(getContext(), this);
+        editMarkerDialog.showDialog(new EditMarkerDialog.Callback() {
             @Override
             public void onSuccess(MapMarker marker) {
                 dataManager.addMarker(marker);
@@ -86,7 +118,7 @@ public class ListFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (resultData != null) {
-                addMarkerDialog.setIconUri(resultData.getData());
+                editMarkerDialog.setIconUri(resultData.getData());
             }
         }
     }

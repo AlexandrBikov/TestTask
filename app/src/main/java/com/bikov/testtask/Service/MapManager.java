@@ -15,4 +15,5 @@ public interface MapManager {
     void onLowMemory();
     void onSaveInstanceState(Bundle outState);
     void addMarker(MapMarker marker);
+    void delete(MapMarker marker);
 }
