@@ -20,7 +20,6 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:id="@+id/icon_list"
-                android:src="@drawable/putin"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginEnd="16dp" />
@@ -29,13 +28,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/title_list"
-                android:text="Vladimir Putin"
                 android:layout_toEndOf="@+id/icon_list"
                 android:layout_alignParentTop="true"
                 android:textSize="25sp" />
 
             <TextView
-                android:text="Vladimir Putin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/subtitle_list"
