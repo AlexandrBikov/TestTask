@@ -68,9 +68,17 @@ public class MapMarker {
         markerSubtitleView.setText(subtitle);
         markerIconView.setImageBitmap(icon);
 
+        markerLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        markerLayout.setPadding(calculatePadding(markerLayout.getMeasuredWidth(), context), 0, 0, 0);
+
         converter = new ViewToBitmapConverter(context, markerLayout);
         converterThread = new Thread(converter);
         converterThread.start();
+    }
+
+    private int calculatePadding(int width, Context context){
+        int dpi = context.getResources().getDisplayMetrics().densityDpi;
+        return (int)(width - 20*(dpi/160f));
     }
 
     public int getHash() {
@@ -84,7 +92,7 @@ public class MapMarker {
     }
 
     public byte[] getBlobIcon() {
-        if(blobIcon == null){
+        if (blobIcon == null) {
             blobIcon = convertBitmapToBlob(icon);
         }
         return blobIcon;
@@ -96,16 +104,16 @@ public class MapMarker {
         result = title.hashCode();
         result = 31 * result + subtitle.hashCode();
         result = 31 * result + hashBitmap(icon);
-        result = 31 * result + (int)(lat*100000000);
-        result = 31 * result + (int)(lng*100000000);
+        result = 31 * result + (int) (lat * 100000000);
+        result = 31 * result + (int) (lng * 100000000);
         return result;
     }
 
-    private int hashBitmap(Bitmap bmp){
+    private int hashBitmap(Bitmap bmp) {
         int hash = 31;
-        for(int x = 0; x < bmp.getWidth(); x+=5){
-            for (int y = 0; y < bmp.getHeight(); y+=5){
-                hash *= (bmp.getPixel(x,y) + 31);
+        for (int x = 0; x < bmp.getWidth(); x += 5) {
+            for (int y = 0; y < bmp.getHeight(); y += 5) {
+                hash *= (bmp.getPixel(x, y) + 31);
             }
         }
         return hash;
