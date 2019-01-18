@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -33,6 +34,10 @@ public class AddMarkerDialog implements View.OnClickListener {
     private String subtitle;
     private double lat;
     private double lng;
+    private String latS;
+    private String lngS;
+    private View focusView;
+    private boolean error;
 
     private static final int READ_REQUEST_CODE = 42;
 
@@ -93,32 +98,31 @@ public class AddMarkerDialog implements View.OnClickListener {
 
     public AlertDialog.Builder showDialog(final Callback callback) {
         addMarkerDialog.setView(dialogView);
-        addMarkerDialog.setPositiveButton(context.getResources().getText(R.string.add_marker_positive),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        getData();
+        AlertDialog dialog = addMarkerDialog.setPositiveButton(context.getResources().getText(R.string.add_marker_positive), null).setNegativeButton(context.getResources().getText(R.string.add_marker_negative), null).create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button button = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         if (isMarkerCorrect()) {
                             callback.onSuccess(new MapMarker(title, subtitle, icon, lat, lng));
                             dialog.dismiss();
                         }
                     }
-                })
-                .setNegativeButton(context.getResources().getText(R.string.add_marker_negative),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                });
+            }
+        });
 
-        addMarkerDialog.create();
-        addMarkerDialog.show();
+        dialog.show();
 
         return addMarkerDialog;
     }
 
     private void getData() {
-        lat = Double.parseDouble((latView.getText()).toString());
-        lng = Double.parseDouble((lngView.getText()).toString());
+        latS = latView.getText().toString();
+        lngS = lngView.getText().toString();
         title = titleView.getText().toString();
         subtitle = subtitleView.getText().toString();
     }
@@ -129,26 +133,31 @@ public class AddMarkerDialog implements View.OnClickListener {
         latView.setError(null);
         subtitleView.setError(null);
 
-        View focusView = null;
-        boolean error = false;
+        getData();
 
-        if (title.isEmpty()) {
-            titleView.setError(context.getString(R.string.error_field_required));
-            focusView = titleView;
-            error = true;
-        }
+        focusView = null;
+        error = false;
 
-        if (subtitle.isEmpty()) {
-            subtitleView.setError(context.getString(R.string.error_field_required));
-            focusView = subtitleView;
-            error = true;
-        }
+        checkView(lngView, lngS);
+        checkView(latView, latS);
+        checkView(subtitleView, subtitle);
+        checkView(titleView, title);
 
         if (error) {
             focusView.requestFocus();
             return false;
         } else {
+            lat = Double.parseDouble(latS);
+            lng = Double.parseDouble(lngS);
             return true;
+        }
+    }
+
+    private void checkView(EditText view, String s){
+        if (s.isEmpty()) {
+            view.setError(context.getString(R.string.error_field_required));
+            focusView = view;
+            error = true;
         }
     }
 
